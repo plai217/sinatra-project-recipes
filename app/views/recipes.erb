@@ -1,0 +1,9 @@
+<h1>Welcome, <%=@user.username%> ID: <%=@user.id%></h1>
+<h1>All Recipes</h1>
+<%@recipes.each do |recipe|%>
+<%binding.pry%>
+  <%=recipe.content%> recipe by <%=recipe.user.username%> Tweet ID: <%=recipe.id%><br>
+<%end%><br>
+<a href="/users/<%=@user.slug%>">Show <%=@user.username%> Recipe</a><br>
+<a href="/recipes/new">New Recipe</a><br>
+<a href="/logout">Log Out</a>

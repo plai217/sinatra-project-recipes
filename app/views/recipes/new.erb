@@ -1,0 +1,7 @@
+<h1>Welcome <%=current_user.username%></h1>
+<h3>Please enter new recipe</h3>
+<form action="/recipes" method="POST">
+  <input type="text" name="recipe" value="recipe name">
+  <input type="text" name="ingredients" value="ingredient">
+  <input type="submit" value="submit">
+</form>
