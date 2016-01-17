@@ -13,31 +13,14 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
-  get '/recipes' do
-    @recipes = Recipe.all
-    if logged_in?
-      @user = User.find(session[:user_id])
-      erb :recipes
-    else
-      redirect "/login"
-    end
-  end
-
   helpers do
-    def redirect_if_not_logged_in
-      if !logged_in?
-        redirect "/login?error=You have to be logged in to do that"
-      end
-    end
-
     def logged_in?
-      !!session[:user_id]
+      !!session[:id]
     end
 
     def current_user
-      User.find(session[:user_id])
+      User.find(session[:id])
     end
-
   end
 
 end

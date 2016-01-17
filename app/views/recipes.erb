@@ -1,9 +1,8 @@
 <h1>Welcome, <%=@user.username%> ID: <%=@user.id%></h1>
 <h1>All Recipes</h1>
 <%@recipes.each do |recipe|%>
-<%binding.pry%>
-  <%=recipe.content%> recipe by <%=recipe.user.username%> Tweet ID: <%=recipe.id%><br>
+  <a href='/recipes/<%=recipe.id%>'><%=recipe.recipe_name%></a> submitted by: <%=User.find(recipe.user_id).username%><br>
 <%end%><br>
-<a href="/users/<%=@user.slug%>">Show <%=@user.username%> Recipe</a><br>
-<a href="/recipes/new">New Recipe</a><br>
-<a href="/logout">Log Out</a>
+<a href="/users/<%=@user.slug%>">Show my recipes</a><br>
+<a href="/recipes/new">Add new recipe</a><br>
+<a href="/users/logout">Log Out</a>

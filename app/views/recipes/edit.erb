@@ -1,7 +1,10 @@
-<h1>Welcome <%=current_user.username%></h1>
-<h3>Please enter new recipe</h3>
-<form action="/recipes" method="POST">
-  <label>Recipe Name: </label><input type="text" name="name"><br>
+<h3><%= @recipe.recipe_name %></h3>
+
+<form action='/recipes/<%=@recipe.id%>' method='POST'>
+  <label>Recipe Name: </label><br><input type='text' value=<%=@recipe.recipe_name%> name='name'><br>
+  <%@recipe.ingredients.each do |i|%>
+    <%= i.ingredient_name %><input checked="unchecked" type='checkbox' name="ingredient[<%=i.ingredient_name%>]">
+  <%end%><br>
   <label>Add ingredient: </label><input type="text" name="recipe[ingredient1]"><br>
   <label>Add ingredient: </label><input type="text" name="recipe[ingredient2]"><br>
   <label>Add ingredient: </label><input type="text" name="recipe[ingredient3]"><br>
@@ -12,4 +15,3 @@
   <label>Add ingredient: </label><input type="text" name="recipe[ingredient8]"><br>
   <input type="submit" value="submit">
 </form>
-

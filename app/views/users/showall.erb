@@ -1,0 +1,10 @@
+<h1>All my recipes</h1>
+
+<%@user.recipes.each do |recipe|%>
+  <%=recipe.recipe_name%>
+<a href="<%="/recipes/#{recipe.id}/edit"%>">Edit</a>
+<a href="<%="/recipes/#{recipe.id}/delete"%>">Delete</a>
+<br>
+<%end%><br>
+
+<a href="/users/logout">Log Out</a>
