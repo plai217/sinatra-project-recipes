@@ -7,7 +7,9 @@ class UsersController < ApplicationController
 
   post '/users/signup' do
     if params.values.include?("")
-      redirect '/users/signup'
+      redirect "/users/signup?error=Fields cannot be blank"
+    elsif User.find_by(username: params[:username]) != nil
+      redirect "/users/signup?error=Username is taken" 
     else
       @user = User.create(params)
       redirect '/users/login'
@@ -16,7 +18,7 @@ class UsersController < ApplicationController
 
   get '/users/login' do
     session.clear
-    erb :'users/login'#, locals: {message: "Incorrect Login or password"}
+    erb :'users/login'
   end
 
   post '/users/login' do
@@ -25,7 +27,7 @@ class UsersController < ApplicationController
       session[:id] = @user.id 
       redirect '/recipes'
     else 
-      redirect '/users/login'
+      redirect "/users/login?error=Invalid login or password"
     end
   end
 

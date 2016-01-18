@@ -1,23 +1,22 @@
 class RecipesController < ApplicationController
 
   get '/recipes' do
-    @recipes = Recipe.all
     redirect_if_not_logged_in
+    @recipes = Recipe.all
     @user = User.find(session[:id])
     erb :'recipes/recipes'
   end
 
   get '/recipes/new' do
-    if logged_in?
-      erb :'recipes/new'
-    else
-      redirect '/users/login'
-    end
+    redirect_if_not_logged_in
+    erb :'recipes/new'
   end
 
   post '/recipes' do
-    if params[:recipe].all?{|x| x == nil}
-      redirect '/recipes/new' #need error needs at least 1 ingredient
+    if params[:recipe].all?{|x,ing| ing == ""}
+      redirect "/recipes/new?error=You need at least one ingredient"
+    elsif params[:name] == ""
+      redirect "/recipes/new?error=Recipe needs a name"
     else
       @recipe = Recipe.create(recipe_name: params[:name], user_id: current_user.id)
       params[:recipe].each do |k,v| 
@@ -28,68 +27,59 @@ class RecipesController < ApplicationController
   end
 
   get '/recipes/:id' do
+    redirect_if_not_logged_in
     @recipe = Recipe.find(params[:id])
-    if logged_in?
-      erb :'recipes/show'
-    else
-      redirect '/users/login'
-    end
+    erb :'recipes/show'
   end 
 
   get '/recipes/:id/edit' do
+    redirect_if_not_logged_in
     @recipe = Recipe.find(params[:id])
     if current_user == User.find(@recipe.user_id)
       erb :'recipes/edit'
-    elsif logged_in?
-      redirect "/recipes/#{@recipe.id}?error=Cannot edit other's recipes"
     else
-      redirect '/users/login'
+      redirect "/recipes/#{@recipe.id}?error=Cannot edit other's recipes"
     end
   end
 
   post '/recipes/:id' do
     @recipe = Recipe.find(params[:id])
-    if logged_in?
-      if params[:name] != ""
-        @recipe.recipe_name = params[:name]
-        @recipe.ingredients.clear
-        params[:recipe].each do |k,ing| 
-          unless ing == ""
-            @recipe.ingredients << Ingredient.find_or_create_by(ingredient_name: ing)
-          end
+    if params[:ingredient] == nil && params[:recipe].all? {|x,ing| ing == ""}
+      redirect "/recipes/#{@recipe.id}/edit?error=You need at least one ingredient"  
+    elsif params[:name] != ""
+      @recipe.recipe_name = params[:name]
+      @recipe.ingredients.clear
+      params[:recipe].each do |k,ing| 
+        unless ing == ""
+          @recipe.ingredients << Ingredient.find_or_create_by(ingredient_name: ing)
         end
+      end
+      if params[:ingredient] != nil
         params[:ingredient].each do |ing,checked|
           @recipe.ingredients << Ingredient.find_or_create_by(ingredient_name: ing)
         end
-        @recipe.save
-        redirect '/recipes'
-      else 
-        redirect "/recipes/#{@recipe.id}/edit"
       end
-    else
-      redirect "/login?error=You have to be logged in to do that"
+      @recipe.save
+      redirect '/recipes'
+    else 
+      redirect "/recipes/#{@recipe.id}/edit?error=Recipe needs a name"
     end
   end
 
   get '/recipes/:id/delete' do
+    redirect_if_not_logged_in
     @recipe = Recipe.find(params[:id])
-    if current_user == User.find(@recipe.user_id)
-      erb :'recipes/delete'
-    elsif logged_in?
+    if current_user != User.find(@recipe.user_id)
       redirect "/recipes/#{@recipe.id}?error=Cannot delete other's recipes"
     else 
-      redirect '/users/login'
+      erb :'recipes/delete'
     end
   end
 
   post '/recipes/:id/delete' do
     @recipe = Recipe.find(params[:id])
-    if logged_in?
-      @recipe.delete
-      redirect '/recipes'
-    else
-      redirect '/users/login'
-    end
+    @recipe.delete
+    redirect '/recipes'
   end
 
 end
