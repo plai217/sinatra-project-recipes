@@ -1,12 +1,12 @@
-<% unless locals.empty? %>
-  <%= message %>
+<% unless params.empty? %>
+  <%= params[:error] %>
 <% end %>
 
-<h1>User Signup</h1>
+<h1>Signup</h1>
 <form method="POST" action="/users/signup">
   <label>Username:</label> <input type="text" name="username">
   <label>Password:</label><input type="text" name="password">
   <input type="submit">
 </form>
-
+<br>
 <a href="/users/login">Log in</a>

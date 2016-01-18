@@ -1,5 +1,5 @@
-<% unless locals.empty? %>
-  <%= message %>
+<% unless params.empty? %>
+  <%= params[:error] %>
 <% end %>
 
 <h1>Login</h1>
@@ -8,5 +8,5 @@
   <label>Password</label><input type="text" name="password">
   <input type="submit" value="submit">
 </form> 
-
+<br>
 <a href="/users/signup">Sign Up</a>

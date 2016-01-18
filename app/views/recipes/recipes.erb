@@ -1,7 +1,11 @@
+<% unless params.empty? %>
+  <%= params[:error] %>
+<% end %>
+
 <h1>Welcome, <%=@user.username%> ID: <%=@user.id%></h1>
-<h1>All Recipes</h1>
+<h3>Click recipe to see details</h3>
 <%@recipes.each do |recipe|%>
-  <a href='/recipes/<%=recipe.id%>'><%=recipe.recipe_name%></a> submitted by: <%=User.find(recipe.user_id).username%><br>
+  <a href='/recipes/<%=recipe.id%>'><%=recipe.recipe_name%></a> submitted by: <%=recipe.user.username%><br>
 <%end%><br>
 <a href="/users/<%=@user.slug%>">Show my recipes</a><br>
 <a href="/recipes/new">Add new recipe</a><br>

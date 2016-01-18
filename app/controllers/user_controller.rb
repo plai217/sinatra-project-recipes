@@ -10,31 +10,22 @@ class UsersController < ApplicationController
       redirect '/users/signup'
     else
       @user = User.create(params)
-      session[:id] = @user.id
-      redirect '/recipes'
+      redirect '/users/login'
     end
   end
 
   get '/users/login' do
-    if logged_in?
-      redirect '/recipes'
-    else
-      erb :'users/login'#, locals: {message: "Incorrect Login or password"}
-    end
+    session.clear
+    erb :'users/login'#, locals: {message: "Incorrect Login or password"}
   end
 
-
   post '/users/login' do
-    if params[:username] == nil || params[:password == nil]
-      redirect "/users/login"
+    @user = User.find_by(:username => params[:username])
+    if @user && @user.authenticate(params[:password])
+      session[:id] = @user.id 
+      redirect '/recipes'
     else 
-      @user = User.find_by(:username => params[:username])
-      if @user && @user.authenticate(params[:password])
-        session[:id] = @user.id 
-        redirect "/recipes"
-      else 
-        redirect "/users/login"
-      end
+      redirect '/users/login'
     end
   end
 
@@ -46,12 +37,9 @@ class UsersController < ApplicationController
   end
 
   get '/users/:slug' do
-    if logged_in?
-      @user = User.find_by_slug(params[:slug])
-      erb :'/users/showall'
-    else
-      redirect "/users/login"
-    end
+    redirect_if_not_logged_in
+    @user = User.find_by_slug(params[:slug])
+    erb :'/users/showall'
   end
 
 end

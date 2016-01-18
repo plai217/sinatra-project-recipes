@@ -1,7 +1,12 @@
-<h3><%= @recipe.recipe_name %></h3>
-<% @recipe.ingredients.each do |i| %>
-  <%=i.ingredient_name%><br>
+<% unless params.empty? %>
+  <%= params[:error] %>
 <% end %>
+
+<h3><%= @recipe.recipe_name %> submitted by: <%=@recipe.user.username%> </h3>
+<% @recipe.ingredients.each do |i| %>
+  <%="#{i.ingredient_name}"%><br>
+<% end %>
+<br>
 <a href="<%="/recipes/#{@recipe.id}/edit"%>">Edit</a>
 <a href="<%="/recipes/#{@recipe.id}/delete"%>">Delete</a>
 <br>
