@@ -6,7 +6,7 @@ class ApplicationController < Sinatra::Base
     set :public_folder, 'public'
     set :views, 'app/views'
     enable :sessions
-    set :session_secret, "recipes"
+    set :session_secret, 'recipes'
   end
 
   get '/' do
@@ -15,14 +15,14 @@ class ApplicationController < Sinatra::Base
 
   helpers do
     def redirect_if_not_logged_in
-      if !logged_in?
+      unless logged_in?
         redirect "/users/login?error=You have to be logged in to do that"
         @error_message = params[:error]
       end
     end
 
     def logged_in?
-      !!session[:id]
+      !!session[:id] #same as session[:id]?
     end
 
     def current_user

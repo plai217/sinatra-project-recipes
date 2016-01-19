@@ -1,15 +1,15 @@
 class UsersController < ApplicationController
 
   get '/users/signup' do
-    session.clear 
+    session.clear
     erb :'users/signup'
   end
 
   post '/users/signup' do
-    if params.values.include?("")
+    if params.values.include?('')
       redirect "/users/signup?error=Fields cannot be blank"
-    elsif User.find_by(username: params[:username]) != nil
-      redirect "/users/signup?error=Username is taken" 
+    elsif User.find_by(:username => params[:username]) != nil
+      redirect "/users/signup?error=Username is taken"
     else
       @user = User.create(params)
       redirect '/users/login'
@@ -24,16 +24,16 @@ class UsersController < ApplicationController
   post '/users/login' do
     @user = User.find_by(:username => params[:username])
     if @user && @user.authenticate(params[:password])
-      session[:id] = @user.id 
+      session[:id] = @user.id
       redirect '/recipes'
-    else 
+    else
       redirect "/users/login?error=Invalid login or password"
     end
   end
 
   get '/users/logout' do
     if logged_in?
-      session.clear 
+      session.clear
     end
     redirect '/'
   end
