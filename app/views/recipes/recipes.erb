@@ -2,7 +2,7 @@
   <%= params[:error] %>
 <% end %>
 
-<h1>Welcome, <%=@user.username%> ID: <%=@user.id%></h1>
+<h1>Welcome, <%=@user.username%></h1>
 <h3>Click recipe to see details</h3>
 <%@recipes.each do |recipe|%>
   <a href='/recipes/<%=recipe.id%>'><%=recipe.recipe_name%></a> submitted by: <%=recipe.user.username%><br>
