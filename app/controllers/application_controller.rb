@@ -22,7 +22,7 @@ class ApplicationController < Sinatra::Base
     end
 
     def logged_in?
-      !!session[:id] #same as session[:id]?
+      !!session[:id] 
     end
 
     def current_user
